@@ -5,6 +5,7 @@ namespace NewUI;
 class Template
 {
     public $template_dir = null;
+    public $script_file = null;
     
     public function __construct($template_dir)
     {
@@ -14,12 +15,12 @@ class Template
     public function render($__script__, $__vars__ = [])
     {
         $__vars__ = is_array($__vars__) ? $__vars__ : ['__nothing__' => $__vars__];
-        $__script_file__ = $this->template_dir . '/' . $__script__ . '.php';
+        $this->script_file = $this->template_dir . '/' . $__script__ . '.php';
         extract($__vars__);
         unset($__script__, $__vars__);
 
         ob_start();
-        $__include_result__ = include $__script_file__;
+        $__include_result__ = include $this->script_file;
         $__out_content__ = ob_get_contents();
         ob_end_clean();
 
