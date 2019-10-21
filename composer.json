@@ -1,0 +1,11 @@
+{
+    "name": "wuding/new-ui",
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "NewUI\\": "src"
+        }
+    }
+}
