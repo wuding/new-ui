@@ -14,7 +14,7 @@ class Template
 
     public function render($__script__, $__vars__ = [])
     {
-        $__vars__ = is_array($__vars__) ? $__vars__ : ['__nothing__' => $__vars__];
+        $__vars__ = is_array($__vars__) ? array_merge(['__nothing__' => null], $__vars__) : ['__nothing__' => $__vars__];
         $this->script_file = $this->template_dir . '/' . $__script__ . '.php';
         extract($__vars__);
         unset($__script__, $__vars__);
