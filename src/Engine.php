@@ -4,7 +4,7 @@ namespace NewUI;
 
 class Engine
 {
-    public $adpater = null;
+    public $adapter = null;
     
     public function __construct($template_dir, $name = 'wuding/new-ui')
     {
@@ -16,17 +16,17 @@ class Engine
         if (array_key_exists($name, $names)) {
             $file = $names[$name];
             $class = "NewUI\\Adpater\\$file";
-            $this->adpater = new $class($template_dir);
+            $this->adapter = new $class($template_dir);
         }
+    }
+
+    public function __call($name, $arguments)
+    {
+        return call_user_func_array(array($this->adapter, $name), $arguments);
     }
 
     public function render($script, $vars = [])
     {
-        return $this->adpater->render($script, $vars);
-    }
-
-    public function setTemplateDir($template_dir)
-    {
-        return $this->adpater->setTemplateDir($template_dir);
+        return $this->adapter->render($script, $vars);
     }
 }

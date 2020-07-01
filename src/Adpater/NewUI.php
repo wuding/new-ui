@@ -11,13 +11,8 @@ class NewUI extends _Abstract
         $this->template = new Template($template_dir);
     }
 
-    public function render($script, $vars = [])
+    public function __call($name, $arguments)
     {
-        return $this->template->render($script, $vars);
-    }
-
-    public function setTemplateDir($template_dir)
-    {
-        $this->template->setTemplateDir($template_dir);
+        return call_user_func_array(array($this->template, $name), $arguments);
     }
 }

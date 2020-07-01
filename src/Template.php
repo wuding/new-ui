@@ -6,6 +6,7 @@ class Template
 {
     public $template_dir = null;
     public $script_file = null;
+    public $output_callback = 'ob_gzhandler';
     
     public function __construct($template_dir)
     {
@@ -15,20 +16,28 @@ class Template
     public function render($__script__, $__vars__ = [])
     {
         $__vars__ = is_array($__vars__) ? array_merge(['__nothing__' => null], $__vars__) : ['__nothing__' => $__vars__];
-        $this->script_file = $this->template_dir . '/' . $__script__ . '.php';
-        extract($__vars__);
-        unset($__script__, $__vars__);
+        $this->script_file = $__script_file__ = $this->template_dir . '/' . $__script__ . '.php';
+        extract($__vars__, EXTR_PREFIX_INVALID, '_');
+        unset($__vars__);
 
-        ob_start();
-        $__include_result__ = include $this->script_file;
-        $__out_content__ = ob_get_contents();
-        ob_end_clean();
-
-        return $__out_content__;
+        ob_start($this->output_callback);
+        $include_result = include $this->script_file;
+        if (1 !== $include_result) {
+            return $include_result;
+        }
+        if (!$this->output_callback) {
+            return ob_get_clean();
+        }
+        ob_end_flush();
     }
     
     public function setTemplateDir($template_dir)
     {
         $this->template_dir = $template_dir;
+    }
+
+    public function setCallback($output_callback)
+    {
+        $this->output_callback = $output_callback;
     }
 }
