@@ -21,7 +21,11 @@ class Template
         unset($__vars__);
 
         ob_start($this->output_callback);
-        $include_result = include $this->script_file;
+        $include_result = @include $this->script_file;
+        if (false === $include_result) {
+            unset($include_result);
+            $include_result = ['vars' => get_defined_vars(), 'msg' => "No such file or directory $this->script_file", 'file' => __FILE__, 'line' => __LINE__];
+        }
         if (1 !== $include_result) {
             return $include_result;
         }
