@@ -20,15 +20,22 @@ class Template
         extract($__vars__, EXTR_PREFIX_INVALID, '_');
         unset($__vars__);
 
-        ob_start($this->output_callback);
+        if (in_array(gettype($this->output_callback), ['string', 'array'])) {
+            ob_start($this->output_callback);
+        } else {
+            ob_start();
+        }
         $include_result = @include $this->script_file;
+        // 包含失败
         if (false === $include_result) {
             unset($include_result);
             $include_result = ['vars' => get_defined_vars(), 'msg' => "No such file or directory $this->script_file", 'file' => __FILE__, 'line' => __LINE__];
         }
+        // 有返回结果
         if (1 !== $include_result) {
             return $include_result;
         }
+        // 直接返回缓冲
         if (!$this->output_callback) {
             return ob_get_clean();
         }
@@ -40,7 +47,7 @@ class Template
         $this->template_dir = $template_dir;
     }
 
-    public function setCallback($output_callback)
+    public function setCallback($output_callback = null)
     {
         $this->output_callback = $output_callback;
     }
