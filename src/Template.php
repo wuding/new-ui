@@ -16,9 +16,10 @@ class Template
     public function render($__script__, $__vars__ = [])
     {
         $__vars__ = is_array($__vars__) ? array_merge(['__nothing__' => null], $__vars__) : ['__nothing__' => $__vars__];
-        $this->script_file = $__script_file__ = $this->template_dir . '/' . $__script__ . '.php';
-        extract($__vars__, EXTR_PREFIX_INVALID, '_');
-        unset($__vars__);
+        $this->script = $__script__;
+        $this->script_file = $this->template_dir . '/' . $__script__ . '.php';
+        extract($__vars__, EXTR_PREFIX_INVALID, '');
+        unset($__script__, $__vars__);
 
         if (in_array(gettype($this->output_callback), ['string', 'array'])) {
             ob_start($this->output_callback);
@@ -29,7 +30,19 @@ class Template
         // 包含失败
         if (false === $include_result) {
             unset($include_result);
-            $include_result = ['vars' => get_defined_vars(), 'msg' => "No such file or directory $this->script_file", 'file' => __FILE__, 'line' => __LINE__];
+            $__template__ = [
+                'code' => 404,
+                'msg' => [
+                    '' => "No such file or directory $this->script_file",
+                    'file' => __FILE__,
+                    'line' => __LINE__,
+                    'method' => __METHOD__,
+                ],
+                'data' => [
+                    'obj' => $this,
+                ],
+            ];
+            $include_result = include dirname(__DIR__) . '/tpl/404.php';
         }
         // 有返回结果
         if (1 !== $include_result) {
