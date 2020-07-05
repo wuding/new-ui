@@ -7,6 +7,7 @@ class Template
     public $template_dir = null;
     public $script_file = null;
     public $output_callback = 'ob_gzhandler';
+    // ob_gzhandler 中途打印而不退出，显示空白
     
     public function __construct($template_dir)
     {
@@ -21,7 +22,7 @@ class Template
         extract($__vars__, EXTR_PREFIX_INVALID, '');
         unset($__script__, $__vars__);
 
-        if (in_array(gettype($this->output_callback), ['string', 'array'])) {
+        if ($this->output_callback && in_array(gettype($this->output_callback), ['string', 'array'])) {
             ob_start($this->output_callback);
         } else {
             ob_start();
@@ -62,6 +63,9 @@ class Template
 
     public function setCallback($output_callback = null)
     {
-        $this->output_callback = $output_callback;
+        if (false !== $output_callback) {
+            $this->output_callback = $output_callback;
+        }
+        return $this->output_callback;
     }
 }
