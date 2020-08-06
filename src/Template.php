@@ -8,6 +8,7 @@ class Template
     public $script_file = null;
     public $output_callback = 'ob_gzhandler';
     // ob_gzhandler 中途打印而不退出，显示空白
+    public static $render_result = null;
     
     public function __construct($template_dir)
     {
@@ -27,6 +28,7 @@ class Template
         } else {
             ob_start();
         }
+        $include_result = null;
         $include_result = @include $this->script_file;
         // 包含失败
         if (false === $include_result) {
@@ -51,7 +53,7 @@ class Template
         }
         // 直接返回缓冲
         if (!$this->output_callback) {
-            return ob_get_clean();
+            return $this->ob_get_clean = ob_get_clean();
         }
         ob_end_flush();
     }
