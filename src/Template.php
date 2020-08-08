@@ -53,7 +53,8 @@ class Template
         }
         // 直接返回缓冲
         if (!$this->output_callback) {
-            return $this->ob_get_clean = ob_get_clean();
+            return ob_get_clean();
+            #$this->ob_get_clean =
         }
         ob_end_flush();
     }
