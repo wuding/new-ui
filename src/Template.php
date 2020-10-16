@@ -9,6 +9,7 @@ class Template
     public $output_callback = 'ob_gzhandler';
     // ob_gzhandler 中途打印而不退出，显示空白
     public static $render_result = null;
+    public static $output_include = null;
     
     public function __construct($template_dir)
     {
@@ -28,8 +29,14 @@ class Template
         } else {
             ob_start();
         }
-        $include_result = null;
-        $include_result = @include $this->script_file;
+
+        // 是否包含
+        if (false !== self::$output_include) {
+            $include_result = @include $this->script_file;
+        } else {
+            $include_result = 1;
+        }
+
         // 包含失败
         if (false === $include_result) {
             unset($include_result);
@@ -54,7 +61,6 @@ class Template
         // 直接返回缓冲
         if (!$this->output_callback) {
             return ob_get_clean();
-            #$this->ob_get_clean =
         }
         ob_end_flush();
     }
@@ -64,10 +70,13 @@ class Template
         $this->template_dir = $template_dir;
     }
 
-    public function setCallback($output_callback = null)
+    public function setCallback($output_callback = null, $output_include = null)
     {
         if (false !== $output_callback) {
             $this->output_callback = $output_callback;
+        }
+        if (null !== $output_include) {
+            self::$output_include = $output_include;
         }
         return $this->output_callback;
     }
