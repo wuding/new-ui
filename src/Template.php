@@ -10,6 +10,7 @@ class Template
     // ob_gzhandler 中途打印而不退出，显示空白
     public static $render_result = null;
     public static $output_include = null;
+    public static $tpl_vars = null;
     
     public function __construct($template_dir)
     {
@@ -60,7 +61,17 @@ class Template
         }
         // 直接返回缓冲
         if (!$this->output_callback) {
-            return ob_get_clean();
+            $output = ob_get_clean();
+            $patterns = $replacements = array();
+            if (is_array(static::$tpl_vars) && preg_match_all("/{{([a-z0-9_]+)}}/i", $output, $matches)) {
+                $variable = $matches[1];
+                foreach ($variable as $key) {
+                    $replacements[] = static::$tpl_vars[$key] ?? null;
+                    $patterns[] = '/{{'. $key .'}}/i';
+                }
+                $output = preg_replace($patterns, $replacements, $output);
+            }
+            return $output;
         }
         ob_end_flush();
     }
@@ -79,5 +90,10 @@ class Template
             self::$output_include = $output_include;
         }
         return $this->output_callback;
+    }
+
+    public function setTplVars($vars)
+    {
+        static::$tpl_vars = $vars;
     }
 }
