@@ -11,6 +11,7 @@ class Template
     public static $render_result = null;
     public static $output_include = null;
     public static $tpl_vars = null;
+    public static $output_content = null;
     
     public function __construct($template_dir)
     {
@@ -63,17 +64,21 @@ class Template
         if (!$this->output_callback) {
             $output = ob_get_clean();
             $patterns = $replacements = array();
-            if (is_array(static::$tpl_vars) && preg_match_all("/{{([a-z0-9_]+)}}/i", $output, $matches)) {
+            if (is_array(static::$tpl_vars) && preg_match_all("/{{([a-z0-9_]+)}}/", $output, $matches)) {
                 $variable = $matches[1];
                 foreach ($variable as $key) {
                     $replacements[] = static::$tpl_vars[$key] ?? null;
-                    $patterns[] = '/{{'. $key .'}}/i';
+                    $patterns[] = '/{{'. $key .'}}/';
                 }
                 $output = preg_replace($patterns, $replacements, $output);
             }
             return $output;
         }
-        ob_end_flush();
+        $end = ob_end_flush();
+        if (null !== static::$output_content) {
+            return static::$output_content;
+        }
+        return $end;
     }
     
     public function setTemplateDir($template_dir)
