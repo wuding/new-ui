@@ -78,7 +78,7 @@ class Template
         if (null !== static::$output_content) {
             return static::$output_content;
         }
-        return $end;
+        return null;
     }
     
     public function setTemplateDir($template_dir)
