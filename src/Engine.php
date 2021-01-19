@@ -6,7 +6,7 @@ class Engine
 {
     public $adpater = null;
     
-    public function __construct($template_dir, $name = 'wuding/new-ui')
+    public function __construct($template_dir = null, $name = 'wuding/new-ui')
     {
         $names = array(
             'wuding/new-ui' => 'NewUI',
