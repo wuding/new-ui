@@ -4,30 +4,68 @@ namespace NewUI;
 
 class Template
 {
+    /*
+    路径
+    */
     public $template_dir = null;
+    public $script = null;
+    public $extension = '.php';
+    public $script_file = null;
+    /*
+    参数、变量
+    */
+    public $render_args = array(null, array());
+    public $render_vars = array();
+    /*
+    包含
+    */
+    public $include = null;
+    public $result = null;
     
-    public function __construct($template_dir)
+    public function __construct($template_dir = null)
     {
-        $this->template_dir = $template_dir;
+        if ($template_dir) {
+            $this->setTemplateDir($template_dir);
+        }
     }
 
-    public function render($__script__, $__vars__ = [])
+    // 返回渲染结果
+    public function render()
     {
-        $__vars__ = is_array($__vars__) ? $__vars__ : ['__nothing__' => $__vars__];
-        $__script_file__ = $this->template_dir . '/' . $__script__ . '.php';
-        extract($__vars__);
-        unset($__script__, $__vars__);
+        //=s
+        $this->render_args(func_get_args());
 
+        //=f
+        $this->render_vars = is_array($this->render_args[1]) ? $this->render_args[1] : array('__nothing__' => $this->render_args[1]);
+
+        //=z
+        $this->script = $this->render_args[0];
+        $this->script_file = $this->template_dir .'/'. $this->script . $this->extension;
+
+        //=sh
+        extract($this->render_vars);
+
+        //=l
         ob_start();
-        $__include_result__ = include $__script_file__;
-        $__out_content__ = ob_get_contents();
+        $this->include = include $this->script_file;
+        $this->result = ob_get_contents();
         ob_end_clean();
 
-        return $__out_content__;
+        //=g
+        return $this->result;
     }
     
-    public function setTemplateDir($template_dir)
+    // 设置模板主目录
+    public function setTemplateDir($template_dir = null)
     {
         $this->template_dir = $template_dir;
+    }
+
+    // 设置参数
+    public function render_args($variable)
+    {
+        foreach ($variable as $key => $value) {
+            $this->render_args[$key] = $value;
+        }
     }
 }
