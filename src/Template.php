@@ -33,7 +33,7 @@ class Template
     public function render()
     {
         //=s
-        $this->render_args(func_get_args());
+        $this->render_args = func_get_args();
 
         //=f
         $this->render_vars = is_array($this->render_args[1]) ? $this->render_args[1] : array('__nothing__' => $this->render_args[1]);
@@ -43,7 +43,7 @@ class Template
         $this->script_file = $this->template_dir .'/'. $this->script . $this->extension;
 
         //=sh
-        extract($this->render_vars);
+        extract($this->render_vars, EXTR_PREFIX_INVALID, '');
 
         //=l
         ob_start();
@@ -59,13 +59,5 @@ class Template
     public function setTemplateDir($template_dir = null)
     {
         $this->template_dir = $template_dir;
-    }
-
-    // 设置参数
-    public function render_args($variable)
-    {
-        foreach ($variable as $key => $value) {
-            $this->render_args[$key] = $value;
-        }
     }
 }
