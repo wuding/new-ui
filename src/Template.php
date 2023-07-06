@@ -4,6 +4,9 @@ namespace NewUI;
 
 class Template
 {
+    const VERSION = '23.7.6';
+    const REVISION = 4;
+
     /*
     路径
     */
@@ -60,4 +63,31 @@ class Template
     {
         $this->template_dir = $template_dir;
     }
+
+
+    //
+    public function pagination($page, $pages)
+    {
+        if (1 >= $pages) {
+            return null;
+        }
+
+        $query_string = $_SERVER['QUERY_STRING'];
+        parse_str($query_string, $$FORM_DATA);
+
+        $last = $page + 1;
+        $next = ($last > $pages) ? $pages : $last;
+
+        $FORM_DATA['page'] = $next;
+        $query_str = http_build_query($FORM_DATA);
+
+        $html = <<<HEREDOC
+
+$page/$pages
+<a href="?$query_str">下一页</a>
+HEREDOC;
+
+        return $html;
+    }
+
 }

@@ -4,6 +4,9 @@ namespace NewUI;
 
 class Engine
 {
+    const VERSION = '23.7.6';
+    const REVISION = 3;
+
     public $adpater = null;
     
     public function __construct($template_dir = null, $name = 'wuding/new-ui')
@@ -28,5 +31,10 @@ class Engine
     public function setTemplateDir($template_dir)
     {
         return $this->adpater->setTemplateDir($template_dir);
+    }
+
+    public function pagination($page, $pages)
+    {
+        return $this->adpater->pagination($page, $pages);
     }
 }
