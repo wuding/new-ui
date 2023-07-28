@@ -4,8 +4,8 @@ namespace NewUI\html;
 
 class Links
 {
-    const VERSION = '23.7.27';
-    const REVISION = 2;
+    const VERSION = '23.7.28';
+    const REVISION = 3;
 
     public static function getView($array = null, $view = null, $view_default = 'node')
     {
@@ -47,6 +47,23 @@ class Links
     <h1>$h1</h1>
 </header>
 HEREDOC;
+
+        return $html;
+
+    }
+
+
+    public static function list($variable, $href_prefix = '')
+    {
+
+        $html = '';
+        foreach ($variable as $key => $value) {
+            $line = "<a href=\"$href_prefix$key\">$value</a> ". PHP_EOL;
+
+            $html .= $line;
+        }
+
+
 
         return $html;
 
