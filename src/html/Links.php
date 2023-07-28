@@ -4,8 +4,8 @@ namespace NewUI\html;
 
 class Links
 {
-    const VERSION = '23.7.6';
-    const REVISION = 1;
+    const VERSION = '23.7.27';
+    const REVISION = 2;
 
     public static function getView($array = null, $view = null, $view_default = 'node')
     {
@@ -29,5 +29,26 @@ class Links
         }
 
         return $html;
+    }
+
+
+    public static function header($a, $div, $h1, $options = [])
+    {
+
+        $href = '/';
+        extract($options);
+
+        $html = <<<HEREDOC
+<header>
+    <blockquote>
+        <a href="$href">$a</a>
+    </blockquote>
+    <div>$div</div>
+    <h1>$h1</h1>
+</header>
+HEREDOC;
+
+        return $html;
+
     }
 }
