@@ -6,8 +6,8 @@ use NewUI\Template;
 
 class NewUI extends _Abstract
 {
-    const VERSION = '23.7.6';
-    const REVISION = 2;
+    const VERSION = '23.8.5';
+    const REVISION = 3;
 
     public function __construct($template_dir)
     {
@@ -27,5 +27,10 @@ class NewUI extends _Abstract
     public function pagination($page, $pages)
     {
         return $this->template->pagination($page, $pages);
+    }
+
+    public function paging($page, $pages, $args, $slice_length = 2)
+    {
+        return $this->template->paging($page, $pages, $args, $slice_length);
     }
 }
