@@ -4,8 +4,8 @@ namespace NewUI;
 
 class Template
 {
-    const VERSION = '23.7.6';
-    const REVISION = 4;
+    const VERSION = '23.8.5';
+    const REVISION = 5;
 
     /*
     路径
@@ -69,7 +69,7 @@ class Template
     public function pagination($page, $pages)
     {
         if (1 >= $pages) {
-            return null;
+            // return null;
         }
 
         $query_string = $_SERVER['QUERY_STRING'];
@@ -88,6 +88,29 @@ $page/$pages
 HEREDOC;
 
         return $html;
+    }
+
+
+    public function paging($page, $pages, $args, $slice_length = 2)
+    {
+
+        $last = $page + 1;
+        $next = ($last > $pages) ? $pages : $last;
+
+        $glue = '/';
+        $pieces = array_slice($args, 0, $slice_length);
+        $pieces[] = $next;
+        $path_way = implode($glue, $pieces);
+
+        $html = <<<HEREDOC
+
+$page/$pages
+<a href="/$path_way">下一页</a>
+HEREDOC;
+
+
+        return $html;
+
     }
 
 }
