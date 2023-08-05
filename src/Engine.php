@@ -4,8 +4,8 @@ namespace NewUI;
 
 class Engine
 {
-    const VERSION = '23.7.6';
-    const REVISION = 3;
+    const VERSION = '23.8.5';
+    const REVISION = 4;
 
     public $adpater = null;
     
@@ -36,5 +36,10 @@ class Engine
     public function pagination($page, $pages)
     {
         return $this->adpater->pagination($page, $pages);
+    }
+
+    public function paging($page, $pages, $args, $slice_length = 2)
+    {
+        return $this->adpater->paging($page, $pages, $args, $slice_length);
     }
 }
