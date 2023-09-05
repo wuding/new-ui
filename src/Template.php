@@ -4,8 +4,8 @@ namespace NewUI;
 
 class Template
 {
-    const VERSION = '23.8.5';
-    const REVISION = 5;
+    const VERSION = '23.9.5';
+    const REVISION = 6;
 
     /*
     路径
@@ -91,7 +91,7 @@ HEREDOC;
     }
 
 
-    public function paging($page, $pages, $args, $slice_length = 2)
+    public function paging($page, $pages, $args, $slice_length = 2, $return_name = null)
     {
 
         $last = $page + 1;
@@ -108,9 +108,37 @@ $page/$pages
 <a href="/$path_way">下一页</a>
 HEREDOC;
 
+        if (is_string($return_name)) {
+            return $$return_name;
+        }
 
         return $html;
 
+    }
+
+
+    public function pageBreak($page, $pages, $args, $slice_length = 2, $dictionary_name = 'XZ')
+    {
+        $path_way = $this->paging($page, $pages, $args, $slice_length, 'path_way');
+
+        $page = <<<HEREDOC
+<form action="/dictionary/$dictionary_name" style="display: inline-block;">
+    <input type="text" name="pg" value="$page" placeholder="" style="height: 24px;width: 50px;">
+    <input type="hidden" name="action" value="goto">
+    <blockquote style="display: none">
+        <button type="submit">Goto</button>
+    </blockquote>
+</form>
+HEREDOC;
+
+        $html = <<<HEREDOC
+
+$page/$pages
+<a href="/$path_way">下一页</a>
+HEREDOC;
+
+
+        return $html;
     }
 
 }
