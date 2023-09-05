@@ -4,8 +4,8 @@ namespace NewUI;
 
 class Engine
 {
-    const VERSION = '23.8.5';
-    const REVISION = 4;
+    const VERSION = '23.9.5';
+    const REVISION = 5;
 
     public $adpater = null;
     
@@ -21,6 +21,12 @@ class Engine
             $class = "NewUI\\Adpater\\$file";
             $this->adpater = new $class($template_dir);
         }
+    }
+
+    public function __call($name, $arguments)
+    {
+        $return_values = call_user_func_array(array($this->adpater, $name), $arguments);
+        return $return_values;
     }
 
     public function render($script, $vars = [])
