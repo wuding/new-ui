@@ -6,12 +6,18 @@ use NewUI\Template;
 
 class NewUI extends _Abstract
 {
-    const VERSION = '23.8.5';
-    const REVISION = 3;
+    const VERSION = '23.9.5';
+    const REVISION = 4;
 
     public function __construct($template_dir)
     {
         $this->template = new Template($template_dir);
+    }
+
+    public function __call($name, $arguments)
+    {
+        $return_values = call_user_func_array(array($this->template, $name), $arguments);
+        return $return_values;
     }
 
     public function render($script, $vars = [])
