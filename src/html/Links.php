@@ -4,8 +4,8 @@ namespace NewUI\html;
 
 class Links
 {
-    const VERSION = '23.7.28';
-    const REVISION = 3;
+    const VERSION = '23.9.23';
+    const REVISION = 4;
 
     public static function getView($array = null, $view = null, $view_default = 'node')
     {
@@ -24,6 +24,31 @@ class Links
                  $val = "<b>$value</b>";
             }
             $line = "<a href=\"?view=$key\">$val</a> ";
+
+            $html .= $line;
+        }
+
+        return $html;
+    }
+
+
+    public static function getQuery($array = null, $view = null, $view_default = null, $suffix = '&date=20230923')
+    {
+        $view = $view ?: $view_default;
+
+        $variable = array(
+            '1' => '节点',
+            '2' => '名称',
+        );
+        $array = $array ?: $variable;
+
+        $html = '';
+        foreach ($array as $key => $value) {
+            $val = $value;
+            if ($view == $key) {
+                 $val = "<b>$value</b>";
+            }
+            $line = "<a href=\"?sort=$key$suffix\">$val</a> ";
 
             $html .= $line;
         }
